@@ -6,12 +6,11 @@ const galeria = document.getElementById('galeria');
 const totalPages = 15;
 const moviesContainer = galeria;
 
+const tituloPag = document.getElementById('tituloPag');
 //Lista de Favoritos
 let favoritesList = JSON.parse(localStorage.getItem('favorites')) || [];
 const storedFavorites = localStorage.getItem('favorites');
-if (storedFavorites) {
-    // favoritesList = JSON.parse(storedFavorites);
-}
+
 
 // Función para hacer una solicitud y procesar una página de resultados
 function fetchMoviesByPage(page) {
@@ -70,12 +69,6 @@ function createMovieCards(movies) {
             favoriteButton.addEventListener('click',() =>{
                 addToFavorites(movie);
             })
-
-            
-            // Agregar el botón de borrar de favoritos a la tarjeta de película
-            if (isFavorite(movie)) {
-                cardDescription.appendChild(deleteButton);
-            }
             // Agregar evento al boton Ver Mas
             cardButton.addEventListener('click', () => {
                 moviesContainer.innerHTML = ''
@@ -105,14 +98,22 @@ function addToFavorites(movie) {
     if (!isFavorite) {
         favoritesList.push(movie);
         localStorage.setItem('favorites', JSON.stringify(favoritesList));
+        Swal.fire({
+            title: 'Agregaste la pelicula a favoritos',
+            })
     } else {
-        console.log('Esta película ya está en tus favoritos.');
+        favoritesList = favoritesList.filter(favorite => favorite.id !== movie.id);
+        localStorage.setItem('favorites',JSON.stringify(favoritesList));
+        Swal.fire({
+            title: 'Eliminaste la pelicula de favoritos',
+            
+            })
     }
 }
 document.getElementById('mostrarFavoritos').addEventListener('click', function() {
     // Limpiar el contenedor de películas
     moviesContainer.innerHTML = '';
-
+    tituloPag.innerHTML = 'Favoritos'
     // Crear tarjetas de película para cada película en la lista de favoritos
     favoritesList.forEach(movie => {
         // Crear elementos HTML para la tarjeta de película
@@ -167,19 +168,6 @@ function deleteFromFavorites(movie) {
 function isFavorite(movie) {
     return favoritesList.some(favoriteMovie => favoriteMovie.id === movie.id);
 }
-document.getElementById('logo').addEventListener('click', function() {
-    // Limpiar el contenedor de películas
-    moviesContainer.innerHTML = '';
-
-    // Mostrar todas las películas
-    fetchAllMovies()
-        .then(allMovies => {
-            createMovieCards(allMovies);
-        })
-        .catch(error => {
-            console.error('Error al obtener películas:', error);
-        });
-});
 // Llamar a la función para obtener todas las películas populares y crear las tarjetas
 fetchAllMovies()
     .then(allMovies => {
@@ -201,6 +189,7 @@ form.addEventListener('submit', function (event) {
     if (searchTerm !== '') {
         // Llamar a una función para buscar películas usando searchTerm
         searchMovies(searchTerm);
+        searchInput.value = '';
     }
 });
 
@@ -223,6 +212,7 @@ function displaySearchResults(results) {
 
     // Crea tarjetas de película para los resultados de la búsqueda
     createMovieCards(results);
+
 }
 
 //Mostrar la descripcion de la pelicula seleccionada
@@ -277,4 +267,65 @@ botonVolver.addEventListener('click',(event) => {
 }
 )
 }
+//! Tomamos los botones de la barra de navegacion para filtrar por categoria
+const categoryAccion = document.getElementById('categoryAccion');
+const categoryComedia = document.getElementById('categoryComedia');
+const categoryTerror = document.getElementById('categoryTerror');
 
+categoryAccion.addEventListener('click', () =>{
+    fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`)
+        .then(response => response.json())
+        .then(data => {
+            const actionGenre = data.genres.find(genre => genre.name === 'Acción');
+            const actionGenreId = actionGenre.id;
+            //Obtenemos el id de la categoria y lo usamos para imprimir los resultados
+            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-ES&with_genres=${actionGenreId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Ahora, data.results contiene las películas de acción
+                const actionMovies = data.results;
+                moviesContainer.innerHTML = '';
+                tituloPag.innerHTML = 'Accion'
+                createMovieCards(actionMovies);
+            });
+    });
+})
+categoryComedia.addEventListener('click', () =>{
+    fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`)
+        .then(response => response.json())
+        .then(data => {
+            const actionGenre = data.genres.find(genre => genre.name === 'Comedia');
+            const actionGenreId = actionGenre.id;
+            //Obtenemos el id de la categoria y lo usamos para imprimir los resultados
+            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-ES&with_genres=${actionGenreId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Ahora, data.results contiene las películas de acción
+                const comedyMovies = data.results;
+                moviesContainer.innerHTML = '';
+
+                tituloPag.innerHTML = 'Comedia'
+                createMovieCards(comedyMovies);
+            });
+    });
+})
+categoryTerror.addEventListener('click', () =>{
+    fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`)
+        .then(response => response.json())
+        .then(data => {
+            const actionGenre = data.genres.find(genre => genre.name === 'Terror');
+            const actionGenreId = actionGenre.id;
+            //Obtenemos el id de la categoria y lo usamos para imprimir los resultados
+            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-ES&with_genres=${actionGenreId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Ahora, data.results contiene las películas de acción
+                const terrorMovies = data.results;
+                moviesContainer.innerHTML = '';
+
+                //Imprimimos el nombre de la categoria mostrada
+                tituloPag.innerHTML = 'Terror'
+                createMovieCards(terrorMovies);
+            });
+    });
+})

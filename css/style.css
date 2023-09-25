@@ -144,5 +144,17 @@ body {
 }
 .btnBorrar{
   border: none;
-  
+  padding: 1rem;
+  color:#7f7f7f;
+  font-size: 1.8rem;
+  border-radius: 1rem;
+  background: #404271;
+  box-shadow:  8px 8px 16px #333459,
+              -8px -8px 16px #4d5089;
+}
+.tituloCategoria{
+  color: #7f7f7f;
+  text-transform: uppercase;
+  font-size: 4rem;
+  font-weight: 700;
 }
