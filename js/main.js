@@ -114,15 +114,16 @@ document.getElementById('mostrarFavoritos').addEventListener('click', function()
     // Limpiar el contenedor de películas
     moviesContainer.innerHTML = '';
     tituloPag.innerHTML = 'Favoritos'
-    // Crear tarjetas de película para cada película en la lista de favoritos
+    // Crear tarjetas de película para cada una en la lista de favoritos
     favoritesList.forEach(movie => {
         // Crear elementos HTML para la tarjeta de película
         const cardContainer = document.createElement('div');
         cardContainer.classList.add('movie-card');
 
         const cardImage = document.createElement('img');
-        cardImage.src = `https://image.tmdb.org/t/p/w300/${movie.backdrop_path}`;
+        cardImage.src = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
         cardImage.alt = `${movie.title}`;
+        cardImage.classList.add('descripcion-img');
 
         const cardDescription = document.createElement('div');
         cardDescription.classList.add('descripcion-card');
@@ -222,7 +223,7 @@ function displayMovieDescription(movie) {
     
     //Creamos la imagen de la pelicula
     const descripcionImagen = document.createElement('IMG');
-    descripcionImagen.src = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`;
+    descripcionImagen.src = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
     descripcionImagen.classList.add('descripcion-img');
     descripcionImagen.alt = movie.title;
 
@@ -286,7 +287,11 @@ categoryAccion.addEventListener('click', () =>{
                 // Ahora, data.results contiene las películas de acción
                 const actionMovies = data.results;
                 moviesContainer.innerHTML = '';
-                tituloPag.innerHTML = 'Accion'
+
+                document.getElementById('galeria').style.display = 'grid';
+                document.getElementById('descripcion-pelicula').style.display = 'none';
+
+                tituloPag.innerHTML = 'Accion';
                 createMovieCards(actionMovies);
             });
     });
@@ -304,6 +309,9 @@ categoryComedia.addEventListener('click', () =>{
                 // Ahora, data.results contiene las películas de acción
                 const comedyMovies = data.results;
                 moviesContainer.innerHTML = '';
+
+                document.getElementById('galeria').style.display = 'grid';
+                document.getElementById('descripcion-pelicula').style.display = 'none';
 
                 tituloPag.innerHTML = 'Comedia'
                 createMovieCards(comedyMovies);
@@ -323,7 +331,8 @@ categoryTerror.addEventListener('click', () =>{
                 // Ahora, data.results contiene las películas de acción
                 const terrorMovies = data.results;
                 moviesContainer.innerHTML = '';
-
+                document.getElementById('galeria').style.display = 'grid';
+                document.getElementById('descripcion-pelicula').style.display = 'none';
                 //Imprimimos el nombre de la categoria mostrada
                 tituloPag.innerHTML = 'Terror'
                 createMovieCards(terrorMovies);
