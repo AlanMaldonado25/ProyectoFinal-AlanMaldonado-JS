@@ -132,3 +132,17 @@ body {
   background-color: #0d1168;
   transition: 1s;
 }
+.titulo-pag{
+  font-size: 4rem;
+  margin-top: 9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #7f7f7f;
+}
+.btnBorrar{
+  border: none;
+  
+}

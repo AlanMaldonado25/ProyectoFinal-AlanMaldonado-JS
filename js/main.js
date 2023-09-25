@@ -7,7 +7,11 @@ const totalPages = 15;
 const moviesContainer = galeria;
 
 //Lista de Favoritos
-const favoritesList = [];
+let favoritesList = JSON.parse(localStorage.getItem('favorites')) || [];
+const storedFavorites = localStorage.getItem('favorites');
+if (storedFavorites) {
+    // favoritesList = JSON.parse(storedFavorites);
+}
 
 // Función para hacer una solicitud y procesar una página de resultados
 function fetchMoviesByPage(page) {
@@ -62,18 +66,16 @@ function createMovieCards(movies) {
             favoriteButton.classList.add('btnFav');
             favoriteButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"  width="30" height="30" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>`;
 
-            //Agregar evento al boton favorito
-            favoriteButton.addEventListener('click', () =>{
-                const favorito = favoritesList.some(favorite => favorite.id === movie.id);
-
-                if(!favorito){
-                    favoritesList.push(movie);
-                    favoriteButton.classList.remove('btnFav');
-                    favoriteButton.classList.add('btnFavActivado');
-                }else{
-                    alert('Este titulo ya esta en favoritos');
-                }
+            //! Agregar evento al boton favorito
+            favoriteButton.addEventListener('click',() =>{
+                addToFavorites(movie);
             })
+
+            
+            // Agregar el botón de borrar de favoritos a la tarjeta de película
+            if (isFavorite(movie)) {
+                cardDescription.appendChild(deleteButton);
+            }
             // Agregar evento al boton Ver Mas
             cardButton.addEventListener('click', () => {
                 moviesContainer.innerHTML = ''
@@ -93,7 +95,91 @@ function createMovieCards(movies) {
         }
     });
 }
+//! Agregar funcion para guardar en favoritos
 
+function addToFavorites(movie) {
+    // Verificar si la película ya está en la lista de favoritos
+    const isFavorite = favoritesList.some(favoriteMovie => favoriteMovie.id === movie.id);
+
+    // Si la película no está en la lista de favoritos, agregarla
+    if (!isFavorite) {
+        favoritesList.push(movie);
+        localStorage.setItem('favorites', JSON.stringify(favoritesList));
+    } else {
+        console.log('Esta película ya está en tus favoritos.');
+    }
+}
+document.getElementById('mostrarFavoritos').addEventListener('click', function() {
+    // Limpiar el contenedor de películas
+    moviesContainer.innerHTML = '';
+
+    // Crear tarjetas de película para cada película en la lista de favoritos
+    favoritesList.forEach(movie => {
+        // Crear elementos HTML para la tarjeta de película
+        const cardContainer = document.createElement('div');
+        cardContainer.classList.add('movie-card');
+
+        const cardImage = document.createElement('img');
+        cardImage.src = `https://image.tmdb.org/t/p/w300/${movie.backdrop_path}`;
+        cardImage.alt = `${movie.title}`;
+
+        const cardDescription = document.createElement('div');
+        cardDescription.classList.add('descripcion-card');
+
+        const cardTitle = document.createElement('h2');
+        cardTitle.classList.add('titulo-card');
+        cardTitle.textContent = movie.title;
+
+        // Crear el botón de borrar de favoritos
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Borrar de favoritos';
+        deleteButton.classList.add('btnBorrar');
+
+        // Agregar un evento al botón de borrar de favoritos
+        deleteButton.addEventListener('click', () => {
+            deleteFromFavorites(movie);
+            // Actualizar la lista de favoritos en la página
+            document.getElementById('mostrarFavoritos').click();
+        });
+
+        // Agregar elementos a la tarjeta de película
+        cardDescription.appendChild(cardTitle);
+        cardDescription.appendChild(deleteButton);
+
+        cardContainer.appendChild(cardImage);
+        cardContainer.appendChild(cardDescription);
+
+        // Agregar la tarjeta de película al contenedor
+        moviesContainer.appendChild(cardContainer);
+    });
+});
+//! Agregar boton eliminar de favoritos
+function deleteFromFavorites(movie) {
+    // Encontrar el índice de la película en la lista de favoritos
+    const index = favoritesList.findIndex(favoriteMovie => favoriteMovie.id === movie.id);
+
+    // Si la película está en la lista de favoritos, eliminarla
+    if (index !== -1) {
+        favoritesList.splice(index, 1);
+        localStorage.setItem('favorites', JSON.stringify(favoritesList));
+    }
+}
+function isFavorite(movie) {
+    return favoritesList.some(favoriteMovie => favoriteMovie.id === movie.id);
+}
+document.getElementById('logo').addEventListener('click', function() {
+    // Limpiar el contenedor de películas
+    moviesContainer.innerHTML = '';
+
+    // Mostrar todas las películas
+    fetchAllMovies()
+        .then(allMovies => {
+            createMovieCards(allMovies);
+        })
+        .catch(error => {
+            console.error('Error al obtener películas:', error);
+        });
+});
 // Llamar a la función para obtener todas las películas populares y crear las tarjetas
 fetchAllMovies()
     .then(allMovies => {
@@ -192,25 +278,3 @@ botonVolver.addEventListener('click',(event) => {
 )
 }
 
-function displayFavorites() {
-    // Obtener el elemento donde mostrar los favoritos
-    const favoritesContainer = document.getElementById('favoritos');
-
-    // Limpiar el contenido anterior
-    favoritesContainer.innerHTML = '';
-
-    // Crear tarjetas de película para las películas favoritas
-    createMovieCards(favoritesList);
-
-    // Puedes agregar estilos CSS y más detalles según tus necesidades
-}
-const mostrarFavoritosButton = document.getElementById('mostrarFavoritos');
-
-mostrarFavoritosButton.addEventListener('click', () => {
-    if (favoritesList === []){
-        alert("No hay ninguna pelicula en tu lista");
-    }
-    
-    galeria.style.display = 'none';
-    displayFavorites();
-});
