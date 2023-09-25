@@ -200,6 +200,7 @@ function searchMovies(searchTerm) {
         .then(respuesta => respuesta.json())
         .then(data => {
             // Procesar los resultados de la búsqueda y mostrarlos en la página
+            tituloPag.innerHTML = 'WIKIMOVIE'
             displaySearchResults(data.results);
         })
         .catch(error => {
