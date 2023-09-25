@@ -11,26 +11,25 @@
     <header class="container">
         <nav class="navbar navbar-expand-xxl navbar-dark bg-dark position-fixed w-100">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#" id="logo">ML</a>
+                <a class="navbar-brand" href="./index.html" id="logo"><img src="./img/logoBgBorrado.png" alt=""></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                        <a class="nav-link active" href="#">Favoritos ⭐</a>
+                        <a class="nav-link" href="#" id="mostrarFavoritos">Favoritos ⭐</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="./pages/categorias.html" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Categorias
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Accion</a></li>
-                                <li><a class="dropdown-item" href="#">Comedia</a></li>
-                                <li><a class="dropdown-item" href="#">Animadas</a></li>
-                                <li><a class="dropdown-item" href="#">Nuevas</a></li>
-                            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Accion</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Comedia</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Terror</a>
+                        </li>
+
                     </ul>
                     <form class="d-flex buscador" id="form">
                         <input class="form-control me-2" type="text" placeholder="Search" id="search">
@@ -43,6 +42,12 @@
         <section>
             <article class="galeria mt-5" id="galeria">
                 <!-- Se genera con javascript -->
+            </article>
+            <article id="descripcion-pelicula" class="descripcion-pelicula">
+                <!-- Muestra descripción de pelicula-->
+            </article>
+            <article id="favoritos">
+                <!-- Peliculas favoritas -->
             </article>
         </section>
         
