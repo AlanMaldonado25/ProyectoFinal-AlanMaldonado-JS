@@ -13,9 +13,10 @@ const storedFavorites = localStorage.getItem('favorites');
 
 
 // Función para hacer una solicitud y procesar una página de resultados
-function fetchMoviesByPage(page) {
-    return fetch(`https://api.themoviedb.org/3/movie/popular?include_adult=false&api_key=${apiKey}&page=${page}&language=es-ES`)
-        .then(respuesta => respuesta.json());
+async function fetchMoviesByPage(page) {
+    const response = await fetch(`https://api.themoviedb.org/3/movie/popular?include_adult=false&api_key=${apiKey}&page=${page}&language=es-ES`);
+    const data = await response.json();
+    return data;
 }
 
 // Función para obtener todas las páginas de resultados de películas
@@ -35,6 +36,7 @@ function fetchAllMovies() {
             return allMovies;
         });
 }
+
 
 // Función para crear tarjetas de película y agregarlas al contenedor
 function createMovieCards(movies) {
@@ -63,18 +65,20 @@ function createMovieCards(movies) {
 
             const favoriteButton = document.createElement('button');
             favoriteButton.classList.add('btnFav');
-            favoriteButton.setAttribute('id', 'btnFav')
+            favoriteButton.setAttribute('id',`btnFav-${movie.id}`)
             favoriteButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"  width="30" height="30" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>`;
 
             //! Agregar evento al boton favorito
-            favoriteButton.addEventListener('click', () => {
-                addToFavorites(movie);
+            favoriteButton.addEventListener('click',() =>{
+                addToFavorites(movie, favoriteButton);
             })
+            
             // Agregar evento al boton Ver Mas
             cardButton.addEventListener('click', () => {
                 moviesContainer.innerHTML = ''
                 displayMovieDescription(movie);
             });
+            
             // Agregar elementos a la tarjeta de película
             cardDescription.appendChild(cardTitle);
             cardDescription.appendChild(cardButton);
@@ -83,7 +87,6 @@ function createMovieCards(movies) {
             cardContainer.appendChild(cardImage);
             cardContainer.appendChild(cardDescription);
 
-
             // Agregar la tarjeta de película al contenedor
             moviesContainer.appendChild(cardContainer);
         }
@@ -91,9 +94,9 @@ function createMovieCards(movies) {
 }
 //! Agregar funcion para guardar en favoritos
 
-function addToFavorites(movie) {
+function addToFavorites(movie, favoriteButton) {
     // Verificar si la película ya está en la lista de favoritos
-    const isFavorite = favoritesList.some(favoriteMovie => favoriteMovie.id === movie.id);
+    const isFavorite = favoritesList.some(favoriteMovie => favoriteMovie.id === movie.id); 
 
     // Si la película no está en la lista de favoritos, agregarla
     if (!isFavorite) {
@@ -102,7 +105,10 @@ function addToFavorites(movie) {
         Swal.fire({
             title: 'Agregaste la pelicula a favoritos',
         })
-
+        
+        // Cambiar el fondo del botón a un color diferente
+        favoriteButton.style.backgroundColor = 'gold';
+        
     } else {
         Swal.fire({
             title: 'Ya esta en la lista de favoritos',
@@ -112,15 +118,18 @@ function addToFavorites(movie) {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Si,quiero borrarla!'
-        }).then((result) => {
+            }).then((result) => {
             if (result.isConfirmed) {
                 favoritesList = favoritesList.filter(favoriteMovie => favoriteMovie.id !== movie.id);
                 localStorage.setItem('favorites', JSON.stringify(favoritesList));
                 Swal.fire(
                     'Borrada!',
-                    'Has borrado este titulo.',
+                    'Has borrado este título.',
                     'success'
                 )
+                
+                // Cambiar el fondo del botón al color original
+                favoriteButton.style.backgroundColor = '';
             }
         })
     }
