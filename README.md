@@ -73,10 +73,13 @@ Este proyecto utiliza las siguientes bibliotecas:
 4- En esta pantalla selecciona el peque link que dice API KEY
 ![image](https://github.com/AlanMaldonado25/ProyectoFinal-AlanMaldonado-JS/assets/113191869/04eb0d77-4762-415e-9cae-f5a1c29fc274)
 
-5-Una vez dentro , encontraras la API KEY que debe ser ingresado en la variable apiKey
+5-Una vez dentro , encontraras la API KEY que debe ser ingresado en la variable apiKey del archivo main.js
 ![image](https://github.com/AlanMaldonado25/ProyectoFinal-AlanMaldonado-JS/assets/113191869/ff2f98d6-e7aa-4a31-87c7-def222579e4e)
 
-## Desde ya muchisimas gracias por ver mi proyecto. 
 
+## Desde ya muchisimas gracias por ver mi proyecto. 
+![JohnnyTestMovieTheaterGIF](https://github.com/AlanMaldonado25/ProyectoFinal-AlanMaldonado-JS/assets/113191869/58d3daa8-dfc3-4737-a5ca-1d5b37e35946)
+
+#_Proximamente agregaremos mas detalles a la seccion ver mas_#
 
 
