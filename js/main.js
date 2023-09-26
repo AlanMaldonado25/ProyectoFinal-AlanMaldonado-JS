@@ -63,6 +63,7 @@ function createMovieCards(movies) {
 
             const favoriteButton = document.createElement('button');
             favoriteButton.classList.add('btnFav');
+            favoriteButton.setAttribute('id','btnFav')
             favoriteButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"  width="30" height="30" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>`;
 
             //! Agregar evento al boton favorito
@@ -92,7 +93,7 @@ function createMovieCards(movies) {
 
 function addToFavorites(movie) {
     // Verificar si la película ya está en la lista de favoritos
-    const isFavorite = favoritesList.some(favoriteMovie => favoriteMovie.id === movie.id);
+    const isFavorite = favoritesList.some(favoriteMovie => favoriteMovie.id === movie.id); 
 
     // Si la película no está en la lista de favoritos, agregarla
     if (!isFavorite) {
@@ -101,15 +102,15 @@ function addToFavorites(movie) {
         Swal.fire({
             title: 'Agregaste la pelicula a favoritos',
             })
+        
     } else {
-        favoritesList = favoritesList.filter(favorite => favorite.id !== movie.id);
-        localStorage.setItem('favorites',JSON.stringify(favoritesList));
         Swal.fire({
             title: 'Eliminaste la pelicula de favoritos',
             
             })
     }
 }
+
 document.getElementById('mostrarFavoritos').addEventListener('click', function() {
     // Limpiar el contenedor de películas
     moviesContainer.innerHTML = '';
